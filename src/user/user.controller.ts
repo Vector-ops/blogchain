@@ -9,16 +9,39 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
+import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './dto/createuser.dto';
 import { GetUserParamDto } from './dto/getuserparam.dto';
 import { UpdateUserDto } from './dto/updateuser.dto';
 import { UserService } from './providers/user.service';
 
 @Controller('user')
+@ApiTags('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get('/:id?')
+  @ApiQuery({
+    name: 'limit',
+    type: 'number',
+    required: false,
+    description: 'Limit the number of user entries per page',
+    example: 10,
+  })
+  @ApiQuery({
+    name: 'page',
+    type: 'number',
+    required: false,
+    description: 'Page number',
+    example: 1,
+  })
+  @ApiOperation({
+    summary: 'Fetches a list of registered users',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'User fetched successfully',
+  })
   public getUser(
     @Param() getUserParamDto: GetUserParamDto,
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe)
@@ -31,8 +54,7 @@ export class UserController {
 
   @Post()
   public createUser(@Body() createUserDto: CreateUserDto) {
-    console.log(createUserDto);
-    return `User created`;
+    return this.userService.createUser(createUserDto);
   }
 
   @Patch('/:id')
