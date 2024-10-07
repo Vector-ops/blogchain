@@ -1,67 +1,71 @@
 import {
+  BadRequestException,
   forwardRef,
   Inject,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { AuthService } from 'src/auth/providers/auth.service';
+import { Repository } from 'typeorm';
+import { CreateUserDto } from '../dto/createuser.dto';
 import { GetUserParamDto } from '../dto/getuserparam.dto';
+import { User } from '../user.entity';
 
+/**
+ * Class to connect to user table and perform business logic
+ */
 @Injectable()
 export class UserService {
   constructor(
-    @Inject(forwardRef(() => AuthService))
-    private readonly authService: AuthService,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {}
 
-  private users = [
-    {
-      id: 123,
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'sexyjohn@gmail.com',
-      password: 'Unsecure@123',
-    },
-    {
-      id: 1244,
-      firstName: 'Joe',
-      lastName: 'Mama',
-      email: 'Joemama@gmail.com',
-      password: 'Unsecure@123',
-    },
-    {
-      id: 125,
-      firstName: 'Local',
-      lastName: 'Milfs',
-      email: 'sendlocation@gmail.com',
-      password: 'Unsecure@123',
-    },
-    {
-      id: 126,
-      firstName: 'jake',
-      lastName: 'Paul',
-      email: 'Iamjake@gmail.com',
-      password: 'Unsecure@123',
-    },
-  ];
+  public async createUser(createUserDto: CreateUserDto) {
+    const user = await this.userRepository.findOne({
+      where: {
+        email: createUserDto.email,
+      },
+    });
 
+    let newUser = this.userRepository.create(createUserDto);
+
+    newUser = await this.userRepository.save(newUser);
+
+    return newUser;
+  }
+
+  /**
+   * Method to get all users from database
+   * @param getUserParamDto
+   * @param limit
+   * @param page
+   * @returns
+   */
   public findAll(
     getUserParamDto: GetUserParamDto,
     limit: number,
     page: number,
   ) {
-    const isAuth = this.authService.isAuthenticated(getUserParamDto.id);
-
-    return isAuth
-      ? this.users
-      : new UnauthorizedException('Login and try again');
+    return 'yes';
   }
 
+  /**
+   * Method to find an user by id
+   * @param id
+   * @returns
+   */
   public findOneById(id: number) {
-    return this.users.find((user) => user.id === id);
+    return 'this';
   }
 
+  /**
+   * Method to find an user by email
+   * @param email
+   * @returns
+   */
   public findOneByEmail(email: string) {
-    return this.users.find((user) => user.email === email);
+    return 'this';
   }
 }
