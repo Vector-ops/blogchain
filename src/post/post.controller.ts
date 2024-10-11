@@ -1,4 +1,13 @@
-import { Body, Controller, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreatePostDto } from './dto/createpost.dto';
 import { UpdatePostDto } from './dto/updatepost.dto';
@@ -18,8 +27,8 @@ export class PostController {
     description: 'You get a 201 if your post is created successfully',
   })
   @Post()
-  public createPost(@Body() createPost: CreatePostDto) {
-    return 'Created post';
+  public createPost(@Body() createPostDto: CreatePostDto) {
+    return this.postService.create(createPostDto);
   }
 
   @ApiOperation({
@@ -34,6 +43,16 @@ export class PostController {
     @Param() updatePostParam: UpdatePostParamDto,
     @Body() updatePostDto: UpdatePostDto,
   ) {
-    return 'patched';
+    return this.postService.update(updatePostDto, updatePostParam.id);
+  }
+
+  @Get()
+  public findAll() {
+    return this.postService.findAll();
+  }
+
+  @Delete('/:id')
+  public deletePost(@Param('id', ParseIntPipe) id: number) {
+    return this.postService.delete(id);
   }
 }
