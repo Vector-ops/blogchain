@@ -1,0 +1,7 @@
+PATCH http://localhost:3000/post/2
+Content-Type: application/json
+
+{
+  "title":"This has typescript too",
+  "tags":[1,2]
+}
