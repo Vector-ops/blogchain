@@ -3,6 +3,7 @@ import { Type } from 'class-transformer';
 import {
   IsArray,
   IsEnum,
+  IsInt,
   IsISO8601,
   IsJSON,
   IsNotEmpty,
@@ -14,9 +15,10 @@ import {
   MinLength,
   ValidateNested,
 } from 'class-validator';
+import { Tag } from 'src/tags/tags.entity';
+import { MetaOptionsDto } from '../../metaoption/dto/createmetaoptions.dto';
 import { PostStatus } from '../enums/poststatus.enum';
 import { PostType } from '../enums/posttype.enum';
-import { MetaOptionsDto } from './metaoptions.dto';
 
 export class CreatePostDto {
   @ApiProperty({
@@ -93,37 +95,39 @@ export class CreatePostDto {
   publishOn?: Date;
 
   @ApiPropertyOptional({
-    description: 'Tags for the blog post',
-    example: ['nest', 'node'],
+    description: 'Tag ids for the blog post',
+    example: [1, 2, 3],
   })
   @IsArray()
   @IsOptional()
-  @IsString({ each: true })
-  @MinLength(3, { each: true })
-  tags?: string[];
+  @IsInt({ each: true })
+  tags?: number[];
 
   @ApiPropertyOptional({
-    type: 'array',
+    type: 'object',
     required: false,
     items: {
       type: 'object',
       properties: {
-        key: {
-          type: 'string',
-          description: 'Can be any string identifier for your meta option',
-          example: 'sidebarEnabled',
-        },
-        value: {
-          type: 'any',
-          description: 'Any value that you want to add to the key',
-          example: true,
+        metavalue: {
+          type: 'json',
+          description: 'The metavalue is a json string',
+          example: '{"sidebarenabled":true}',
         },
       },
     },
   })
-  @IsArray()
   @IsOptional()
   @ValidateNested({ each: true })
   @Type(() => MetaOptionsDto)
-  metaOptions?: MetaOptionsDto[];
+  metaOptions?: MetaOptionsDto | null;
+
+  @ApiProperty({
+    type: 'integer',
+    required: true,
+    example: 3344,
+  })
+  @IsInt()
+  @IsNotEmpty()
+  authorId: number;
 }
