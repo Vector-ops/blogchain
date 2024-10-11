@@ -1,5 +1,15 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { MetaOptionsDto } from './dto/metaoptions.dto';
+import { MetaOption } from 'src/metaoption/metaoption.entity';
+import { Tag } from 'src/tags/tags.entity';
+import { User } from 'src/user/user.entity';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { PostStatus } from './enums/poststatus.enum';
 import { PostType } from './enums/posttype.enum';
 
@@ -64,7 +74,18 @@ export class Post {
   })
   publishOn?: Date;
 
-  tags?: string[];
+  @ManyToMany(() => Tag, (tag) => tag.posts)
+  @JoinTable()
+  tags?: Tag[];
 
-  metaOptions?: MetaOptionsDto;
+  @OneToOne(() => MetaOption, (metaoption) => metaoption.post, {
+    cascade: true,
+    eager: true,
+  })
+  metaOptions?: MetaOption;
+
+  @ManyToOne(() => User, (user) => user.posts, {
+    eager: true,
+  })
+  author: User;
 }
