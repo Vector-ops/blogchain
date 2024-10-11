@@ -7,14 +7,17 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from 'src/user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { MetaoptionModule } from './metaoption/metaoption.module';
 import { PostModule } from './post/post.module';
-import { User } from './user/user.entity';
+import { TagsModule } from './tags/tags.module';
 
 @Module({
   imports: [
     UserModule,
     PostModule,
     AuthModule,
+    TagsModule,
+    MetaoptionModule,
     ConfigModule.forRoot({
       envFilePath: ['.env'],
     }),
@@ -23,7 +26,8 @@ import { User } from './user/user.entity';
       inject: [],
       useFactory: () => ({
         type: 'postgres',
-        entities: [User],
+        // entities: [User],
+        autoLoadEntities: true,
         synchronize: true,
         port: 5432,
         username: process.env.POSTGRES_USER,
