@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { MetaOptionsDto } from './dto/createmetaoptions.dto';
-import { MetaOption } from './metaoption.entity';
+import { MetaOptionsDto } from '../dto/createmetaoptions.dto';
+import { MetaOption } from '../metaoption.entity';
 
 @Injectable()
 export class MetaoptionService {
