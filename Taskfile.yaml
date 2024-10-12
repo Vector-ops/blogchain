@@ -1,6 +1,21 @@
 version: '3'
 
 tasks:
+  dev:
+    desc: 'Start app in dev mode'
+    cmds:
+      - npm run start:dev
+
+  start:
+    desc: 'Start app'
+    cmds:
+      - npm run start
+
+  test:
+    desc: 'Run tests'
+    cmds:
+      - npm run start:test
+
   start-docker:
     desc: 'Start Docker container'
     cmds:
