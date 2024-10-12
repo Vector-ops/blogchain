@@ -3,13 +3,18 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
 // Import Modules
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from 'src/user/user.module';
 import { AuthModule } from './auth/auth.module';
+import appConfig from './config/app.config';
+import databaseConfig from './config/database.config';
+import envValidation from './config/env.validation';
 import { MetaoptionModule } from './metaoption/metaoption.module';
 import { PostModule } from './post/post.module';
 import { TagsModule } from './tags/tags.module';
+
+const ENV = process.env.NODE_ENV;
 
 @Module({
   imports: [
@@ -19,21 +24,24 @@ import { TagsModule } from './tags/tags.module';
     TagsModule,
     MetaoptionModule,
     ConfigModule.forRoot({
-      envFilePath: ['.env'],
+      isGlobal: true,
+      load: [appConfig, databaseConfig],
+      envFilePath: !ENV ? '.env' : `.env.${ENV}`,
+      validationSchema: envValidation,
     }),
     TypeOrmModule.forRootAsync({
-      imports: [],
-      inject: [],
-      useFactory: () => ({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
         type: 'postgres',
         // entities: [User],
-        autoLoadEntities: true,
-        synchronize: true,
-        port: 5432,
-        username: process.env.POSTGRES_USER,
-        password: process.env.POSTGRES_PASSWORD,
-        host: 'localhost',
-        database: process.env.POSTGRES_DB,
+        autoLoadEntities: configService.get('database.autoloadEntities'),
+        synchronize: configService.get('database.synchronize'),
+        port: +configService.get('database.port'),
+        username: configService.get('database.user'),
+        password: configService.get('database.password'),
+        host: configService.get('database.host'),
+        database: configService.get('database.db'),
       }),
     }),
   ],
