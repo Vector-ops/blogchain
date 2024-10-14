@@ -3,7 +3,6 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
-  IsStrongPassword,
   Matches,
   MaxLength,
   MinLength,
