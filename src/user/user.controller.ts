@@ -10,6 +10,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { CreateManyUsersDto } from './dto/createmanyusers.dto';
 import { CreateUserDto } from './dto/createuser.dto';
 import { GetUserParamDto } from './dto/getuserparam.dto';
 import { UpdateUserDto } from './dto/updateuser.dto';
@@ -60,5 +61,10 @@ export class UserController {
   @Patch('/:id')
   public updateUser(@Body() updateUserDto: UpdateUserDto) {
     return `Updated user`;
+  }
+
+  @Post('/create-many')
+  public createManyUsers(@Body() createManyUsersDto: CreateManyUsersDto) {
+    return this.userService.createMany(createManyUsersDto);
   }
 }
