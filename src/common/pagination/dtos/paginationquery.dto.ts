@@ -1,0 +1,15 @@
+import { Type } from 'class-transformer';
+import { IsInt, IsOptional, IsPositive } from 'class-validator';
+import { number } from 'joi';
+
+export class PaginationQueryDto {
+  @IsOptional()
+  @IsPositive()
+  @Type(() => Number)
+  limit?: number = 10;
+
+  @IsOptional()
+  @IsPositive()
+  @Type(() => Number)
+  page?: number = 1;
+}
