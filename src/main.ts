@@ -10,6 +10,11 @@ async function bootstrap() {
       whitelist: true,
       forbidNonWhitelisted: true,
       transform: true,
+
+      // eliminates @Type() decorators in the DTOs
+      // transformOptions:{
+      //   enableImplicitConversion: true
+      // }
     }),
   );
 

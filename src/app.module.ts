@@ -13,6 +13,7 @@ import envValidation from './config/env.validation';
 import { MetaoptionModule } from './metaoption/metaoption.module';
 import { PostModule } from './post/post.module';
 import { TagsModule } from './tags/tags.module';
+import { PaginationModule } from './common/pagination/pagination.module';
 
 const ENV = process.env.NODE_ENV;
 
@@ -44,6 +45,7 @@ const ENV = process.env.NODE_ENV;
         database: configService.get('database.db'),
       }),
     }),
+    PaginationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
