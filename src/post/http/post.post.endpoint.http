@@ -2,18 +2,17 @@ POST http://localhost:3000/post
 Content-Type: application/json
 
 {
-  "title":"Test post for this",
-  "type":"post",
-  "slug":"test-post-for-tags-2",
-  "status":"draft",
-  "content":"SHit hists hard",
-  "schema":"{\r\n \"@context\":\"https:\/\/schema.org\",\r\n \"@type\": \"Person\"\r\n}",
-  "featuredImageUrl":"https://picsum.photos/200",
-  "publishOn":"2024-03-16T07:46:32+0000",
-  "tags": ["saiko", "kawa"],
-  "metaOptions":{
-    "metaValue":"{\"sidebarEnabled\":true}"
-  },
-  "authorId": 1,
-  "tags":[1, 2]
-}
+    "title": "Sample Post for Tags",
+    "type": "post",
+    "slug": "sample-tagg-r-tagd",
+    "status": "draft",
+    "content": "Sample content for tags.",
+    "schema":"{\r\n \"@context\":\"https:\/\/schema.org\",\r\n \"@type\": \"Person\"\r\n}",
+    "featuredImageUrl": "https://picsum.photos/200",
+    "publishOn": "2024-03-16T07:46:32+0000",
+    "metaOptions":{
+      "metaValue":"{\"sidebarEnabled\":true}"
+    },
+    "authorId":6,
+    "tags":[6,7] 
+  }
