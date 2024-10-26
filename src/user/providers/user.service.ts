@@ -10,6 +10,7 @@ import { CreateManyUsersDto } from '../dto/createmanyusers.dto';
 import { CreateUserDto } from '../dto/createuser.dto';
 import { GetUserParamDto } from '../dto/getuserparam.dto';
 import { User } from '../user.entity';
+import { CreateuserProvider } from './createuser.provider';
 import { UserCreateManyProvider } from './usercreatemany.provider';
 
 /**
@@ -22,45 +23,11 @@ export class UserService {
     private readonly userRepository: Repository<User>,
     private readonly dataSource: DataSource,
     private readonly userCreateManyProvider: UserCreateManyProvider,
+    private readonly createUserProvider: CreateuserProvider,
   ) {}
 
-  public async createUser(createUserDto: CreateUserDto) {
-    let existingUser = undefined;
-    try {
-      existingUser = await this.userRepository.findOne({
-        where: {
-          email: createUserDto.email,
-        },
-      });
-    } catch (error) {
-      console.log(error);
-      throw new RequestTimeoutException(
-        'Unable to process request at the moment.',
-        {
-          description: 'Error connecting to the database',
-        },
-      );
-    }
-
-    if (existingUser) {
-      throw new BadRequestException('User already exists');
-    }
-
-    let newUser = this.userRepository.create(createUserDto);
-
-    try {
-      newUser = await this.userRepository.save(newUser);
-    } catch (error) {
-      console.log(error);
-      throw new RequestTimeoutException(
-        'Unable to process request at the moment.',
-        {
-          description: 'Error connecting to the database',
-        },
-      );
-    }
-
-    return newUser;
+  public async create(createUserDto: CreateUserDto) {
+    return this.createUserProvider.createUser(createUserDto);
   }
 
   /**
@@ -104,14 +71,15 @@ export class UserService {
    * @returns
    */
   public async findOneById(id: number) {
+    let user = undefined;
     try {
-      const user = await this.userRepository.findOneBy({ id });
-      if (!user) {
-        throw new BadRequestException('User does not exist');
-      }
-      return user;
+      user = await this.userRepository.findOneBy({ id });
     } catch (error) {
       console.log(error);
+      if (error.statusCode === 400) {
+        return error;
+      }
+
       throw new RequestTimeoutException(
         'Unable to process request at the moment.',
         {
@@ -119,6 +87,10 @@ export class UserService {
         },
       );
     }
+    if (!user) {
+      throw new BadRequestException('User does not exist');
+    }
+    return user;
   }
 
   /**
@@ -130,7 +102,7 @@ export class UserService {
     let user = undefined;
 
     try {
-      user = await this.userRepository.findOneBy({ email });
+      return await this.userRepository.findOneBy({ email });
     } catch (error) {
       console.log(error);
       throw new RequestTimeoutException(
@@ -140,12 +112,6 @@ export class UserService {
         },
       );
     }
-
-    if (!user) {
-      throw new BadRequestException('User does not exist');
-    }
-
-    return user;
   }
 
   public async createMany(createManyUsersDto: CreateManyUsersDto) {
