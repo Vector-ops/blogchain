@@ -10,6 +10,8 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ActiveUser } from 'src/auth/decorators/activeuser.decorator';
+import { IActiveUser } from 'src/auth/interfaces/activeuser.interface';
 import { CreatePostDto } from './dto/createpost.dto';
 import { GetPostsDto } from './dto/getpost.dto';
 import { UpdatePostDto } from './dto/updatepost.dto';
@@ -29,8 +31,11 @@ export class PostController {
     description: 'You get a 201 if your post is created successfully',
   })
   @Post()
-  public createPost(@Body() createPostDto: CreatePostDto) {
-    return this.postService.create(createPostDto);
+  public createPost(
+    @Body() createPostDto: CreatePostDto,
+    @ActiveUser() user: IActiveUser,
+  ) {
+    return this.postService.create(createPostDto, user);
   }
 
   @ApiOperation({
