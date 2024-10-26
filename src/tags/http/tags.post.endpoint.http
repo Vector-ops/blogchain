@@ -1,5 +1,6 @@
 POST http://localhost:3000/tags
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiamFrZUBnbWFpbC5jb20iLCJpYXQiOjE3Mjk4NjEwNDYsImV4cCI6MTcyOTg2NDY0NiwiYXVkIjoibG9jYWxob3N0OjMwMDAiLCJpc3MiOiJsb2NhbGhvc3Q6MzAwMCJ9.ZTdE2QtTMJeuMbne-zC4V2gOKoWImPEbby9bYiPpngo
 
 {
   "name":"astro",
