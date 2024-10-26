@@ -4,6 +4,7 @@ import {
   RequestTimeoutException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { IActiveUser } from 'src/auth/interfaces/activeuser.interface';
 import { Paginated } from 'src/common/pagination/interfaces/paginated.interface';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 import { MetaOption } from 'src/metaoption/metaoption.entity';
@@ -14,6 +15,7 @@ import { CreatePostDto } from '../dto/createpost.dto';
 import { GetPostsDto } from '../dto/getpost.dto';
 import { UpdatePostDto } from '../dto/updatepost.dto';
 import { Post } from '../post.entity';
+import { CreatepostProvider } from './createpost.provider';
 
 @Injectable()
 export class PostService {
@@ -21,47 +23,14 @@ export class PostService {
     private readonly userService: UserService,
     private readonly tagsService: TagsService,
     private readonly paginationProvider: PaginationProvider,
+    private readonly createPostProvider: CreatepostProvider,
 
     @InjectRepository(Post)
     private readonly postRepository: Repository<Post>,
   ) {}
 
-  public async create(createPostDto: CreatePostDto) {
-    try {
-      const author = await this.userService.findOneById(createPostDto.authorId);
-
-      if (!author) {
-        throw new BadRequestException('Author does not exist');
-      }
-
-      const tags = await this.tagsService.findMultiple(createPostDto.tags);
-
-      if (!tags) {
-        throw new BadRequestException('Some/All tags do not exist');
-      }
-
-      let post = this.postRepository.create({
-        ...createPostDto,
-        tags,
-        author: author,
-      });
-
-      post = await this.postRepository.save(post);
-
-      if (!post) {
-        throw new BadRequestException('Failed to create post');
-      }
-
-      return post;
-    } catch (error) {
-      console.log(error);
-      throw new RequestTimeoutException(
-        'Unable to process request at the moment.',
-        {
-          description: 'Error connecting to the database',
-        },
-      );
-    }
+  public async create(createPostDto: CreatePostDto, user: IActiveUser) {
+    return this.createPostProvider.createPost(createPostDto, user);
   }
 
   public async findAll(getPostsDto: GetPostsDto): Promise<Paginated<Post>> {
