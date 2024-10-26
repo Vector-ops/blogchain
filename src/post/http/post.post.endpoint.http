@@ -1,10 +1,11 @@
 POST http://localhost:3000/post
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiamFrZUBnbWFpbC5jb20iLCJpYXQiOjE3Mjk4NjEwNDYsImV4cCI6MTcyOTg2NDY0NiwiYXVkIjoibG9jYWxob3N0OjMwMDAiLCJpc3MiOiJsb2NhbGhvc3Q6MzAwMCJ9.ZTdE2QtTMJeuMbne-zC4V2gOKoWImPEbby9bYiPpngo
 
 {
     "title": "Sample Post for Tags",
     "type": "post",
-    "slug": "sample-tagg-r-tagd",
+    "slug": "sample-tagg-r-tagdf",
     "status": "draft",
     "content": "Sample content for tags.",
     "schema":"{\r\n \"@context\":\"https:\/\/schema.org\",\r\n \"@type\": \"Person\"\r\n}",
@@ -13,6 +14,5 @@ Content-Type: application/json
     "metaOptions":{
       "metaValue":"{\"sidebarEnabled\":true}"
     },
-    "authorId":6,
-    "tags":[6,7] 
+    "tags":[1]
   }
