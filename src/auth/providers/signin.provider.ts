@@ -13,7 +13,7 @@ import { HashProvider } from './hash.provider';
 
 import { User } from 'src/user/user.entity';
 import jwtConfig from '../config/jwt.config';
-import { IActiveUser } from '../interfaces/activeuser.interface';
+import { GenerateTokensProvider } from './generatetokens.provider';
 
 @Injectable()
 export class SigninProvider {
@@ -22,6 +22,7 @@ export class SigninProvider {
     private readonly userService: UserService,
     private readonly hashProvider: HashProvider,
     private readonly jwtService: JwtService,
+    private readonly generateTokenProvider: GenerateTokensProvider,
 
     @Inject(jwtConfig.KEY)
     private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
@@ -48,19 +49,6 @@ export class SigninProvider {
       throw new UnauthorizedException('Invalid email/password');
     }
 
-    const accessToken = await this.jwtService.signAsync(
-      {
-        sub: user.id,
-        email: user.email,
-      } as IActiveUser,
-      {
-        audience: this.jwtConfiguration.audience,
-        expiresIn: this.jwtConfiguration.accessTokenTTL,
-        secret: this.jwtConfiguration.secret,
-        issuer: this.jwtConfiguration.issuer,
-      },
-    );
-
-    return { accessToken };
+    return await this.generateTokenProvider.generateTokens(user);
   }
 }
