@@ -6,8 +6,10 @@ import { AuthController } from './auth.controller';
 import jwtConfig from './config/jwt.config';
 import { AuthService } from './providers/auth.service';
 import { BcryptProvider } from './providers/bcrypt.provider';
+import { GenerateTokensProvider } from './providers/generatetokens.provider';
 import { HashProvider } from './providers/hash.provider';
 import { SigninProvider } from './providers/signin.provider';
+import { RefreshTokensProvider } from './providers/refresh-tokens.provider';
 
 @Module({
   controllers: [AuthController],
@@ -18,6 +20,8 @@ import { SigninProvider } from './providers/signin.provider';
       useClass: BcryptProvider,
     },
     SigninProvider,
+    GenerateTokensProvider,
+    RefreshTokensProvider,
   ],
   imports: [
     forwardRef(() => UserModule),
