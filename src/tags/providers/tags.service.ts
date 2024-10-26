@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { CreateTagDto } from '../dto/createtag.dto';
@@ -18,6 +18,7 @@ export class TagsService {
   }
 
   public async findMultiple(ids: number[]) {
+    if (!ids) throw new BadRequestException('Post requires atleast one tag');
     const results = await this.tagsRepository.find({
       where: {
         id: In(ids),
