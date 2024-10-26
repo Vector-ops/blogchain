@@ -7,10 +7,11 @@ import { UserModule } from 'src/user/user.module';
 import { PostController } from './post.controller';
 import { Post } from './post.entity';
 import { PostService } from './providers/post.service';
+import { CreatepostProvider } from './providers/createpost.provider';
 
 @Module({
   controllers: [PostController],
-  providers: [PostService],
+  providers: [PostService, CreatepostProvider],
   imports: [
     UserModule,
     TypeOrmModule.forFeature([Post, MetaOption]),
