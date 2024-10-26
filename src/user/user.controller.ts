@@ -8,8 +8,13 @@ import {
   Patch,
   Post,
   Query,
+  SetMetadata,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Auth } from 'src/auth/decorators/auth.decorator';
+import { AuthType } from 'src/auth/enums/auth-type.enum';
+import { AccessTokenGuard } from 'src/auth/guards/access-token/access-token.guard';
 import { CreateManyUsersDto } from './dto/createmanyusers.dto';
 import { CreateUserDto } from './dto/createuser.dto';
 import { GetUserParamDto } from './dto/getuserparam.dto';
@@ -54,8 +59,9 @@ export class UserController {
   }
 
   @Post()
+  @Auth(AuthType.Bearer)
   public createUser(@Body() createUserDto: CreateUserDto) {
-    return this.userService.createUser(createUserDto);
+    return this.userService.create(createUserDto);
   }
 
   @Patch('/:id')
