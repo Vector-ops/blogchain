@@ -9,4 +9,8 @@ export default Joi.object({
   POSTGRES_USER: Joi.string().required(),
   DATABASE_HOST: Joi.string().required(),
   POSTGRES_DB: Joi.string().required(),
+  JWT_SECRET: Joi.string().required(),
+  JWT_TOKEN_AUDIENCE: Joi.string().required(),
+  JWT_ISSUER: Joi.string().required(),
+  JWT_ACCESS_TOKEN_TTL: Joi.number().required(),
 });
