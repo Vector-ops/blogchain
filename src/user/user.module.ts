@@ -11,10 +11,12 @@ import { UserService } from './providers/user.service';
 import { UserCreateManyProvider } from './providers/usercreatemany.provider';
 import { UserController } from './user.controller';
 import { User } from './user.entity';
+import { FindOneByGoogleIdProvider } from './providers/find-one-by-google-id.provider';
+import { CreateGoogleUserProvider } from './providers/create-google-user.provider';
 
 @Module({
   controllers: [UserController],
-  providers: [UserService, UserCreateManyProvider, CreateuserProvider],
+  providers: [UserService, UserCreateManyProvider, CreateuserProvider, FindOneByGoogleIdProvider, CreateGoogleUserProvider],
   exports: [UserService],
   imports: [TypeOrmModule.forFeature([User]), forwardRef(() => AuthModule)],
 })
