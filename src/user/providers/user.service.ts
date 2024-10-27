@@ -9,8 +9,11 @@ import { DataSource, Repository } from 'typeorm';
 import { CreateManyUsersDto } from '../dto/createmanyusers.dto';
 import { CreateUserDto } from '../dto/createuser.dto';
 import { GetUserParamDto } from '../dto/getuserparam.dto';
+import { IGoogleUser } from '../interfaces/googleuser.interface';
 import { User } from '../user.entity';
+import { CreateGoogleUserProvider } from './create-google-user.provider';
 import { CreateuserProvider } from './createuser.provider';
+import { FindOneByGoogleIdProvider } from './find-one-by-google-id.provider';
 import { UserCreateManyProvider } from './usercreatemany.provider';
 
 /**
@@ -24,6 +27,8 @@ export class UserService {
     private readonly dataSource: DataSource,
     private readonly userCreateManyProvider: UserCreateManyProvider,
     private readonly createUserProvider: CreateuserProvider,
+    private readonly findOneByGoogleIdProvider: FindOneByGoogleIdProvider,
+    private readonly createGoogleUserProvider: CreateGoogleUserProvider,
   ) {}
 
   public async create(createUserDto: CreateUserDto) {
@@ -116,5 +121,13 @@ export class UserService {
 
   public async createMany(createManyUsersDto: CreateManyUsersDto) {
     return await this.userCreateManyProvider.createMany(createManyUsersDto);
+  }
+
+  public async findOneByGoogleId(googleId: string) {
+    return await this.findOneByGoogleIdProvider.findOneByGoogleId(googleId);
+  }
+
+  public async createGoogleUser(googleUser: IGoogleUser) {
+    return await this.createGoogleUserProvider.createGoogleUser(googleUser);
   }
 }
