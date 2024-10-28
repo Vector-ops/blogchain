@@ -1,11 +1,10 @@
 POST http://localhost:3000/user
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiamFrZUBnbWFpbC5jb20iLCJpYXQiOjE3MjkxNzMxMzksImV4cCI6MTcyOTE3NjczOSwiYXVkIjoibG9jYWxob3N0OjMwMDAiLCJpc3MiOiJsb2NhbGhvc3Q6MzAwMCJ9.eLYRQCPb0H2YGhnk5lHrdVbuklOaFE74PB1_i0EUcKo
 
 {
   "firstName":"Jake",
   "lastName":"script",
-  "email":"jake@gmail.com",
+  "email":"jak2e2@gmail.com",
   "password":"Pass@1234"
 }
 
