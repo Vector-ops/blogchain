@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { HashProvider } from 'src/auth/providers/hash.provider';
+import { MailService } from 'src/mail/providers/mail.service';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from '../dto/createuser.dto';
 import { User } from '../user.entity';
@@ -14,6 +15,8 @@ import { User } from '../user.entity';
 @Injectable()
 export class CreateuserProvider {
   constructor(
+    private readonly mailService: MailService,
+
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
 
@@ -58,6 +61,12 @@ export class CreateuserProvider {
           description: 'Error connecting to the database',
         },
       );
+    }
+
+    try {
+      await this.mailService.sendWelcomeEmail(newUser);
+    } catch (error) {
+      console.log(error);
     }
 
     return newUser;
